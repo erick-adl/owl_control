@@ -11,6 +11,8 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final HomeController bloc = BlocProvider.of<HomeController>(context);
+
+    
     List<String> lista = ["Um", "Dois", "tres", "quatro"];
     return Scaffold(
         appBar: AppBar(

@@ -40,6 +40,7 @@ class HomeController implements BlocBase {
 
   }
 
+
   int listLenght(){
     return _onlineBoards.length;
   }
@@ -114,7 +115,7 @@ class HomeController implements BlocBase {
     /// Our known topic to publish to
     const String pubTopic = 'owl/online-boards';
     final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-    builder.addString('Hello from mqtt_client');
+    builder.addString('camera de seguranaa 1');
 
     /// Subscribe to it
     client.subscribe(pubTopic, MqttQos.exactlyOnce);
@@ -128,3 +129,4 @@ class HomeController implements BlocBase {
     // TODO: implement dispose
   }
 }
+
