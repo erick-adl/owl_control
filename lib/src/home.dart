@@ -11,79 +11,95 @@ class _Home extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final HomeController bloc = BlocProvider.of<HomeController>(context);
-
+    List<String> lista = ["Um", "Dois", "tres", "quatro"];
     return Scaffold(
         appBar: AppBar(
           title: Text('Owl'),
           centerTitle: true,
         ),
-        body: StreamBuilder(
-            stream: bloc.outDataStatus,
-            builder: (contex, snap) {
-              if (!snap.hasData) {
-                return Center(
-                    child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(8.0),
-                  padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-                  child: Text(
-                    "Conectando, aguarde...",
-                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+        body: Stack(          
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(top: 10.0),
+              child: Container(                
+                alignment: Alignment(0, -1),
+                child: Text(
+                  "Status: Blabla",
+                  style: TextStyle(fontSize: 20.0, color: Colors.redAccent),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 40.0),
+              child: ListView.builder(
+                itemCount: lista.length,
+                itemBuilder: (context, index) {
+                  return buildCard(lista[index]);
+                },
+              ),
+            )
+          ],
+        ));
+  }
+
+  Widget buildCard(text) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(10.0)),
+      padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
+      margin: EdgeInsets.all(5.0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            text,
+            style: TextStyle(fontSize: 26.0, color: Colors.black),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 40.0,
+                  child: RaisedButton(
+                    child: Text(
+                      "Editar",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    textColor: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    onPressed: () {},
                   ),
-                ));
-              } else if (snap.hasData) {
-                return Center(
-                    child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.all(8.0),
-                  padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-                  child: Text(
-                    "${snap.data}",
-                    style: TextStyle(color: Colors.black, fontSize: 16.0),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 40.0,
+                  child: RaisedButton(
+                    child: Text(
+                      "Iniciar",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    textColor: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    onPressed: () {},
                   ),
-                ));
-              } else if (snap.data
-                  .toString()
-                  .toUpperCase()
-                  .contains("CONNECTED")) {
-                return StreamBuilder(
-                  stream: bloc.outDataStatus,
-                  builder: (contex, snap) {
-                    if (!snap.hasData) {
-                      return ListView.builder(
-                        itemCount: 5,
-                        itemBuilder: (contex, inex) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey)),
-                            margin: EdgeInsets.all(20.0),
-                            padding: EdgeInsets.all(20.0),
-                            child: Column(
-                              children: <Widget>[
-                                Text("blabla"),
-                                Row(
-                                  children: <Widget>[
-                                    RaisedButton(
-                                      onPressed: () {},
-                                    ),
-                                    RaisedButton(
-                                      onPressed: () {},
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
-                );
-              }
-            }));
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
