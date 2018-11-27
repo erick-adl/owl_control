@@ -1,5 +1,7 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
-import 'package:owl/src/App.dart';
+import 'package:owl/src/home-controller.dart';
+import 'package:owl/src/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +15,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: App(),
+      home: BlocProvider<HomeController>(
+        bloc: HomeController(),
+        child: Home(),
+      ),
     );
   }
 }
