@@ -35,14 +35,14 @@ class _Home extends State<Home> {
               },
             ),
             StreamBuilder(
-                stream: null,
+                stream: bloc.oudataOnlineBoardsController,                
                 builder: (contex, snap) {
                   return Container(
                     padding: EdgeInsets.only(top: 80.0),
                     child: ListView.builder(
-                      itemCount: lista.length,
+                      itemCount: snap.data == null ? 0 : bloc.listLenght(),
                       itemBuilder: (context, index) {
-                        return buildCard(lista[index]);
+                        return buildCard(snap.data[index]);
                       },
                     ),
                   );

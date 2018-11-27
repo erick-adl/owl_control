@@ -8,22 +8,42 @@ class HomeController implements BlocBase {
   static const platform =
       const MethodChannel('flutter.rortega.com.basicchannelcommunication');
 
+  List<String> _onlineBoards =  new List<String>();
+
   HomeController() {
     platform.setMethodCallHandler(_handleMethod);
     _mqttConnect();
   }
 
-  var _dataController = StreamController<String>();
+  var _dataStatusController = StreamController<String>();
 
-  Stream<String> get outDataStatus => _dataController.stream;
-  Sink<String> get inDataStatus => _dataController.sink;
+  Stream<String> get outDataStatus => _dataStatusController.stream;
+  Sink<String> get inDataStatus => _dataStatusController.sink;
+
+  var _dataOnlineBoardsController = StreamController<List<String>>();
+
+  Stream<List<String>> get oudataOnlineBoardsController =>
+      _dataOnlineBoardsController.stream;
+  Sink<List<String>> get _indataOnlineBoardsController =>
+      _dataOnlineBoardsController.sink;
 
   Future<Null> ShowBubbleControl() async =>
       await platform.invokeMethod('showNativeView');
   Future<Null> GetDataFromNative() async =>
       await platform.invokeMethod('getData');
 
-  void sendData(dynamic c) {
+  void sendListOnlineBoards(String s) {
+    if (!_onlineBoards.contains(s)) {
+      _onlineBoards.add(s);
+    }
+    _indataOnlineBoardsController.add(_onlineBoards);
+
+  }
+
+  int listLenght(){
+    return _onlineBoards.length;
+  }
+  void sendDataStatus(dynamic c) {
     inDataStatus.add(c);
   }
 
@@ -52,22 +72,22 @@ class HomeController implements BlocBase {
         .withWillMessage('My Will message')
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
-    sendData('Client connecting....');
+    sendDataStatus('Client connecting....');
     client.connectionMessage = connMess;
 
     try {
       await client.connect();
     } on Exception catch (e) {
-      sendData('Client exception - $e');
+      sendDataStatus('Client exception - $e');
       client.disconnect();
     }
 
     /// Check we are connected
     if (client.connectionStatus.state == ConnectionState.connected) {
-      sendData('Client connected');
+      sendDataStatus('Client connected');
     } else {
       /// Use status here rather than state if you also want the broker return code.
-      sendData(
+      sendDataStatus(
           'Client connection failed - disconnecting, status is ${client.connectionStatus}');
       client.disconnect();
     }
@@ -80,17 +100,11 @@ class HomeController implements BlocBase {
     /// notifications of published updates to each subscribed topic.
     client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage recMess = c[0].payload;
-      final String pt =
-          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final String pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
-      /// The above may seem a little convoluted for users only interested in the
-      /// payload, some users however may be interested in the received publish message,
-      /// lets not constrain ourselves yet until the package has been in the wild
-      /// for a while.
-      /// The payload is a byte buffer, this will be specific to the topic
-      print(
-          'TOPIC >>> ${c[0].topic} PAYLOAD >>> $pt');
-      print('');
+      print('TOPIC >>> ${c[0].topic} PAYLOAD >>> $pt');
+      sendListOnlineBoards(pt);
+      
     });
 
     /// Lets publish to our topic
