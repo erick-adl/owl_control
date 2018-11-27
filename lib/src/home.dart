@@ -17,27 +17,36 @@ class _Home extends State<Home> {
           title: Text('Owl'),
           centerTitle: true,
         ),
-        body: Stack(          
+        body: Stack(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Container(                
-                alignment: Alignment(0, -1),
-                child: Text(
-                  "Status: Blabla",
-                  style: TextStyle(fontSize: 20.0, color: Colors.redAccent),
-                ),
-              ),
+            StreamBuilder(
+              stream: bloc.outDataStatus,
+              builder: (contex, snap) {
+                return Container(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Container(
+                    alignment: Alignment(0, -1),
+                    child: Text(
+                      "Status: ${snap.data}",
+                      style: TextStyle(fontSize: 20.0, color: Colors.brown),
+                    ),
+                  ),
+                );
+              },
             ),
-            Container(
-              padding: EdgeInsets.only(top: 40.0),
-              child: ListView.builder(
-                itemCount: lista.length,
-                itemBuilder: (context, index) {
-                  return buildCard(lista[index]);
-                },
-              ),
-            )
+            StreamBuilder(
+                stream: null,
+                builder: (contex, snap) {
+                  return Container(
+                    padding: EdgeInsets.only(top: 80.0),
+                    child: ListView.builder(
+                      itemCount: lista.length,
+                      itemBuilder: (context, index) {
+                        return buildCard(lista[index]);
+                      },
+                    ),
+                  );
+                }),
           ],
         ));
   }
