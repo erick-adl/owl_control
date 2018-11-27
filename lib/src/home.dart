@@ -12,12 +12,20 @@ class _Home extends State<Home> {
   Widget build(BuildContext context) {
     final HomeController bloc = BlocProvider.of<HomeController>(context);
 
-    
-    List<String> lista = ["Um", "Dois", "tres", "quatro"];
     return Scaffold(
         appBar: AppBar(
           title: Text('Owl'),
           centerTitle: true,
+          actions: <Widget>[
+            FlatButton(
+              child: Icon(
+                Icons.refresh,
+                size: 30.0,
+              ),
+              textColor: Colors.white,
+              onPressed: () {},
+            )
+          ],
         ),
         body: Stack(
           children: <Widget>[
@@ -28,24 +36,36 @@ class _Home extends State<Home> {
                   padding: EdgeInsets.only(top: 10.0),
                   child: Container(
                     alignment: Alignment(0, -1),
-                    child: Text(
-                      "Status: ${snap.data}",
-                      style: TextStyle(fontSize: 20.0, color: Colors.brown),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 3.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.grey),
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        "Status: ${snap.data}",
+                        style: TextStyle(fontSize: 20.0, color: Colors.white),
+                      ),
                     ),
                   ),
                 );
               },
             ),
             StreamBuilder(
-                stream: bloc.oudataOnlineBoardsController,                
+                stream: bloc.oudataOnlineBoardsController,
                 builder: (contex, snap) {
                   return Container(
-                    padding: EdgeInsets.only(top: 80.0),
-                    child: ListView.builder(
-                      itemCount: snap.data == null ? 0 : bloc.listLenght(),
-                      itemBuilder: (context, index) {
-                        return buildCard(snap.data[index]);
-                      },
+                    padding: EdgeInsets.only(top: 60.0),
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
+                      margin: EdgeInsets.all(5.0),
+                      child: ListView.builder(
+                        itemCount: snap.data == null ? 0 : bloc.listLenght(),
+                        itemBuilder: (context, index) {
+                          return buildCard(snap.data[index]);
+                        },
+                      ),
                     ),
                   );
                 }),
@@ -56,8 +76,9 @@ class _Home extends State<Home> {
   Widget buildCard(text) {
     return Container(
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(10.0)),
+          border: Border.all(color: Colors.grey, width: 3.0),
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.grey),
       padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
       margin: EdgeInsets.all(5.0),
       child: Column(
@@ -75,7 +96,7 @@ class _Home extends State<Home> {
                   height: 40.0,
                   child: RaisedButton(
                     child: Text(
-                      "Editar",
+                      "Editar nome",
                       style: TextStyle(
                         fontSize: 18.0,
                       ),
