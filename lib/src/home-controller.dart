@@ -9,6 +9,7 @@ class HomeController implements BlocBase {
       const MethodChannel('flutter.rortega.com.basicchannelcommunication');
 
   List<String> _onlineBoards =  new List<String>();
+  String _status;
 
   HomeController() {
     platform.setMethodCallHandler(_handleMethod);
@@ -48,6 +49,7 @@ class HomeController implements BlocBase {
     inDataStatus.add(c);
   }
 
+
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
       case "message":
@@ -73,23 +75,23 @@ class HomeController implements BlocBase {
         .withWillMessage('My Will message')
         .startClean() // Non persistent session for testing
         .withWillQos(MqttQos.atLeastOnce);
-    sendDataStatus('Client connecting....');
+    sendDataStatus('Conectando, aguarde...');
     client.connectionMessage = connMess;
 
     try {
       await client.connect();
     } on Exception catch (e) {
-      sendDataStatus('Client exception - $e');
+      sendDataStatus('Erro ao conectar - $e');
       client.disconnect();
     }
 
     /// Check we are connected
     if (client.connectionStatus.state == ConnectionState.connected) {
-      sendDataStatus('Client connected');
+      sendDataStatus('Usuário conectado');
     } else {
       /// Use status here rather than state if you also want the broker return code.
       sendDataStatus(
-          'Client connection failed - disconnecting, status is ${client.connectionStatus}');
+          'Falha de conexão - desconectando, status: ${client.connectionStatus}');
       client.disconnect();
     }
 
@@ -115,7 +117,7 @@ class HomeController implements BlocBase {
     /// Our known topic to publish to
     const String pubTopic = 'owl/online-boards';
     final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
-    builder.addString('camera de seguranaa 1');
+    builder.addString('camera de seguranca 1');
 
     /// Subscribe to it
     client.subscribe(pubTopic, MqttQos.exactlyOnce);
