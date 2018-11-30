@@ -49,10 +49,6 @@ class HomeController implements BlocBase {
     _inDataOnlineBoardsController.add(_onlineBoards);
   }
 
-  int listLenght() {
-    return _onlineBoards.length;
-  }
-
   void sendDataStatus(dynamic c) {
     inDataStatus.add(c);
   }

@@ -43,14 +43,14 @@ class _Home extends State<Home> {
       ),
       body: StreamBuilder(
           stream: bloc.ouDataOnlineBoardsController,
-          builder: (contex, snap) {
+          builder: (contex, AsyncSnapshot<List<String>> snap) {
             return Container(
               padding: EdgeInsets.only(top: 10.0),
               child: Container(
                 padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
                 margin: EdgeInsets.all(5.0),
                 child: ListView.builder(
-                  itemCount: snap.data == null ? 0 : bloc.listLenght(),
+                  itemCount: snap.data.length,
                   itemBuilder: (context, index) {
                     return buildCard(snap.data[index]);
                   },
