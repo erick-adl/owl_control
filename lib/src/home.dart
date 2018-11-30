@@ -19,7 +19,7 @@ class _Home extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {bloc.mqttReset();},
         child: Icon(Icons.refresh),
         elevation: 3.0,
         backgroundColor: Colors.red,
@@ -43,7 +43,7 @@ class _Home extends State<Home> {
         color: Colors.red,
       ),
       body: StreamBuilder(
-          stream: bloc.oudataOnlineBoardsController,
+          stream: bloc.ouDataOnlineBoardsController,
           builder: (contex, snap) {
             return Container(
               padding: EdgeInsets.only(top: 10.0),
@@ -95,7 +95,7 @@ class _Home extends State<Home> {
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0)),
                     onPressed: () {
-                      _newNamePlacaAlert(context);
+                      _newNamePlacaAlert(context, text);
                     },
                   ),
                 ),
@@ -126,19 +126,21 @@ class _Home extends State<Home> {
     );
   }
 
-  _newNamePlacaAlert(BuildContext context) {
+  _newNamePlacaAlert(BuildContext context, String text) {
     TextEditingController controller = new TextEditingController();
 
     AlertDialog ad = new AlertDialog(
+      shape: new RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(10.0)),
       content: Container(
-        height: 180.0,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(100.0)),
+        height: 200.0,
         child: Column(
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
-                "Digite novo nome",
+                text,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
             ),
@@ -154,19 +156,16 @@ class _Home extends State<Home> {
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 1.0),
               child: Row(
                 children: <Widget>[
-                  Container(
-                    height: 30.0,
-                    width: 2.0,
-                    color: Colors.grey.withOpacity(0.5),
-                    margin: const EdgeInsets.only(left: 00.0, right: 10.0),
-                  ),
                   new Expanded(
-                    child: TextField(                      
-                      controller: controller,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Novo nome da placa...",
-                        hintStyle: TextStyle(color: Colors.grey),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: controller,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Novo nome da placa...",
+                          hintStyle: TextStyle(color: Colors.grey),
+                        ),
                       ),
                     ),
                   )
@@ -178,7 +177,7 @@ class _Home extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 RaisedButton(
-                  color: Colors.red,
+                    color: Colors.red,
                     child: Text(
                       "Salvar",
                       style: TextStyle(
@@ -187,7 +186,7 @@ class _Home extends State<Home> {
                     ),
                     textColor: Colors.white,
                     shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0)),
+                        borderRadius: new BorderRadius.circular(10.0)),
                     onPressed: () {}),
               ],
             )

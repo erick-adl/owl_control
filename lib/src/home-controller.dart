@@ -9,8 +9,9 @@ class HomeController implements BlocBase {
   static const platform =
       const MethodChannel('flutter.rortega.com.basicchannelcommunication');
 
-  List<String> _onlineBoards =  new List<String>();
-  String _status;
+  List<String> _onlineBoards = new List<String>();
+
+  MqttClient client = MqttClient('iot.eclipse.org', '');
 
   HomeController() {
     platform.setMethodCallHandler(_handleMethod);
@@ -24,10 +25,15 @@ class HomeController implements BlocBase {
 
   var _dataOnlineBoardsController = StreamController<List<String>>();
 
-  Stream<List<String>> get oudataOnlineBoardsController =>
+  Stream<List<String>> get ouDataOnlineBoardsController =>
       _dataOnlineBoardsController.stream;
-  Sink<List<String>> get _indataOnlineBoardsController =>
+  Sink<List<String>> get _inDataOnlineBoardsController =>
       _dataOnlineBoardsController.sink;
+
+  Future<int> mqttReset() async {
+    _onlineBoards.clear();
+    _inDataOnlineBoardsController.add(_onlineBoards);
+  }
 
   Future<Null> ShowBubbleControl() async =>
       await platform.invokeMethod('showNativeView');
@@ -38,18 +44,16 @@ class HomeController implements BlocBase {
     if (!_onlineBoards.contains(s)) {
       _onlineBoards.add(s);
     }
-    _indataOnlineBoardsController.add(_onlineBoards);
-
+    _inDataOnlineBoardsController.add(_onlineBoards);
   }
 
-
-  int listLenght(){
+  int listLenght() {
     return _onlineBoards.length;
   }
+
   void sendDataStatus(dynamic c) {
     inDataStatus.add(c);
   }
-
 
   Future<dynamic> _handleMethod(MethodCall call) async {
     switch (call.method) {
@@ -63,12 +67,10 @@ class HomeController implements BlocBase {
   Future<int> _mqttConnect() async {
     await MqttUtilities.asyncSleep(3);
 
-    final MqttClient client = MqttClient('iot.eclipse.org', '');
-
     client.logging(on: false);
     client.keepAlivePeriod = 20;
 
-    final MqttConnectMessage connMess = MqttConnectMessage()
+    MqttConnectMessage connMess = MqttConnectMessage()
         .withClientIdentifier('Mqtt_MyClientUniqueId')
         .keepAliveFor(20) // Must agree with the keep alive set above or not set
         .withWillTopic(
@@ -104,11 +106,11 @@ class HomeController implements BlocBase {
     /// notifications of published updates to each subscribed topic.
     client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
       final MqttPublishMessage recMess = c[0].payload;
-      final String pt = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      final String pt =
+          MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
       print('TOPIC >>> ${c[0].topic} PAYLOAD >>> $pt');
       sendListOnlineBoards(pt);
-      
     });
 
     /// Lets publish to our topic
@@ -135,4 +137,3 @@ class HomeController implements BlocBase {
   @override
   BuildContext context;
 }
-
