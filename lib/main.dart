@@ -12,9 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.brown,
-      ),
+      theme: ThemeData(hintColor: Colors.white, primaryColor: Colors.red),
       home: BlocProvider<HomeController>(
         bloc: HomeController(),
         child: Home(),

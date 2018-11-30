@@ -19,10 +19,10 @@ class _Home extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Increment',
+        onPressed: () {},        
         child: Icon(Icons.refresh),
         elevation: 3.0,
+        backgroundColor: Colors.red,
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -38,8 +38,8 @@ class _Home extends State<Home> {
           ),
           height: 50.0,
         ),
-        notchedShape: CircularNotchedRectangle(),
-        color: Colors.brown,
+        shape: CircularNotchedRectangle(),
+        color: Colors.red,
       ),
       body: StreamBuilder(
           stream: bloc.oudataOnlineBoardsController,

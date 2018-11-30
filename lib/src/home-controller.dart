@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
@@ -130,5 +131,8 @@ class HomeController implements BlocBase {
   void dispose() {
     // TODO: implement dispose
   }
+
+  @override
+  BuildContext context;
 }
 
