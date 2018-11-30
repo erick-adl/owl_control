@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:rxdart/rxdart.dart';
+
 
 class HomeController implements BlocBase {
   static const platform =
@@ -18,12 +20,12 @@ class HomeController implements BlocBase {
     _mqttConnect();
   }
 
-  var _dataStatusController = StreamController<String>();
+  var _dataStatusController = BehaviorSubject<String>(seedValue: "Aguarde...");
 
   Stream<String> get outDataStatus => _dataStatusController.stream;
   Sink<String> get inDataStatus => _dataStatusController.sink;
 
-  var _dataOnlineBoardsController = StreamController<List<String>>();
+  var _dataOnlineBoardsController = BehaviorSubject<List<String>>();
 
   Stream<List<String>> get ouDataOnlineBoardsController =>
       _dataOnlineBoardsController.stream;
@@ -41,7 +43,7 @@ class HomeController implements BlocBase {
       await platform.invokeMethod('getData');
 
   void sendListOnlineBoards(String s) {
-    if (!_onlineBoards.contains(s)) {
+    if (!_onlineBoards.contains(s) && s.length >= 3 ) {
       _onlineBoards.add(s);
     }
     _inDataOnlineBoardsController.add(_onlineBoards);
@@ -99,7 +101,7 @@ class HomeController implements BlocBase {
     }
 
     /// Ok, lets try a subscription
-    const String topic = 'owl/online-boards'; // Not a wildcard topic
+    const String topic = 'smart-owl/online-boards'; // Not a wildcard topic
     client.subscribe(topic, MqttQos.atMostOnce);
 
     /// The client has a change notifier object(see the Observable class) which we then listen to to get
@@ -118,7 +120,7 @@ class HomeController implements BlocBase {
     print('Publishing our topic');
 
     /// Our known topic to publish to
-    const String pubTopic = 'owl/online-boards';
+    const String pubTopic = 'smart-owl/online-boards';
     final MqttClientPayloadBuilder builder = MqttClientPayloadBuilder();
     builder.addString('camera de seguranca 1');
 

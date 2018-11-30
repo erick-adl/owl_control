@@ -27,8 +27,7 @@ class _Home extends State<Home> {
       bottomNavigationBar: BottomAppBar(
         child: Container(
           padding: EdgeInsets.all(15.0),
-          child: StreamBuilder(
-            initialData: "aguarde...",
+          child: StreamBuilder(            
             stream: bloc.outDataStatus,
             builder: (contex, snap) {
               return Text(
