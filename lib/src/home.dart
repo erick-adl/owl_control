@@ -19,7 +19,7 @@ class _Home extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},        
+        onPressed: () {},
         child: Icon(Icons.refresh),
         elevation: 3.0,
         backgroundColor: Colors.red,
@@ -28,6 +28,7 @@ class _Home extends State<Home> {
         child: Container(
           padding: EdgeInsets.all(15.0),
           child: StreamBuilder(
+            initialData: "aguarde...",
             stream: bloc.outDataStatus,
             builder: (contex, snap) {
               return Text(
@@ -93,7 +94,9 @@ class _Home extends State<Home> {
                     color: Theme.of(context).primaryColor,
                     shape: new RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0)),
-                    onPressed: () {},
+                    onPressed: () {
+                      _newNamePlacaAlert(context);
+                    },
                   ),
                 ),
               ),
@@ -121,5 +124,78 @@ class _Home extends State<Home> {
         ],
       ),
     );
+  }
+
+  _newNamePlacaAlert(BuildContext context) {
+    TextEditingController controller = new TextEditingController();
+
+    AlertDialog ad = new AlertDialog(
+      content: Container(
+        height: 180.0,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100.0)),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                "Digite novo nome",
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.withOpacity(0.5),
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 1.0),
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    height: 30.0,
+                    width: 2.0,
+                    color: Colors.grey.withOpacity(0.5),
+                    margin: const EdgeInsets.only(left: 00.0, right: 10.0),
+                  ),
+                  new Expanded(
+                    child: TextField(                      
+                      controller: controller,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Novo nome da placa...",
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                RaisedButton(
+                  color: Colors.red,
+                    child: Text(
+                      "Salvar",
+                      style: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                    ),
+                    textColor: Colors.white,
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(30.0)),
+                    onPressed: () {}),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+
+    showDialog(context: context, child: ad);
   }
 }
